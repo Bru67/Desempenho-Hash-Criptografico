@@ -1,3 +1,5 @@
+# Feito por: BRUNA DA SILVA CARNELOSSI e EDMUND SOARES DE SOUSA 
+
 import getpass
 import json
 import hashlib
@@ -9,15 +11,14 @@ ARQUIVO_JSON = "users.json"
 
 def inicializarDados():
     if not os.path.exists(ARQUIVO_JSON):
-        # Cria o arquivo JSON com um usuários padrões se não existir
-        senha = "1234" # Senha padrão para os usuários
+        # Cria o arquivo JSON com os seguintes usuarios se o arquivo não existir
+        senha = "1234" # Senha padrão para os usuarios
         senha_em_bytes = senha.encode('utf-8')
         hash_obj = hashlib.sha256()
         hash_obj.update(senha_em_bytes)
         hash_hex = hash_obj.hexdigest()
 
-        usuarios = [
-
+        usuarios = [ #obs: criar mais 2 pelo terminal
             {"nome": "brun", "senha": hash_hex},
             {"nome": "edie", "senha": hash_hex},
         ]
@@ -32,8 +33,6 @@ def menu():
         menuInicial = input(f"\nBem-vindo \n--------------------------\n"
                             " [1] - Login\n [2] - Cadastrar \n [3] - Sair"
                             "\n--------------------------\n")
-
-        autentificado = False
 
         # Login e Autenticação:
         if menuInicial == "1":
@@ -128,48 +127,13 @@ def menu():
         # Sair
         elif menuInicial == "3":
             print("Obrigada pela visita :) \nAté Breve!\n")
-            break
+            exit()
+            break        
 
         else:
             print("\nErro! Opção inválida!\n")
 
 
-    try:
-        with open("users.json", "r", encoding="utf-8") as arquivo:
-            dados = json.load(arquivo)  
-    except FileNotFoundError:
-        dados = [] 
-
-    autentificado = False
-    tentativas = 0
-
-    while tentativas <= 5:
-        login = input("Login: ")
-        senha = input("Senha: ")
-        if any(dado["nome"] == login and dado["senha"] == senha for dado in dados):
-            print(f"\n Seja Bem-vindo: {login}\n")
-            autentificado = True
-            break
-                                
-        else:
-            print("\n Login ou Senha incorretos, por favor tente novamente \n")
-            tentativas +=1
-        
-        if tentativas == 5:   
-            print("Muitas tentativas! Acesso Bloqueado!")
-            break
-        elif autentificado == True:
-            break
-
 inicializarDados()
 menu()
 
-
-
-## Para salvar em hash
-# texto = "Olá, mundo!"
-# texto_em_bytes = texto.encode('utf-8')
-# hash_obj = hashlib.sha256()
-# hash_obj.update(texto_em_bytes)
-# hash_hex = hash_obj.hexdigest()
-# print(hash_hex)
