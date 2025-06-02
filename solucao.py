@@ -4,24 +4,31 @@ import getpass
 import json
 import hashlib
 import os
+import base64
 
 # Seção 3: Solução contra ataques de força bruta
 
 ARQUIVO_JSON = "users.json"
 
+def gerarSalt():
+    return base64.b64encode(os.urandom(16)).decode('utf-8')
+
 def inicializarDados():
     if not os.path.exists(ARQUIVO_JSON):
-        # Cria o arquivo JSON com um usuários padrões se não existir
-        senha = "1234" # Senha padrão para os usuários
-        senha_em_bytes = senha.encode('utf-8')
-        hash_obj = hashlib.sha256()
-        hash_obj.update(senha_em_bytes)
-        hash_hex = hash_obj.hexdigest()
+        # Cria o arquivo JSON com usuarios padrões se não existir
+        senha = "1234" 
+        salt = gerarSalt() 
+        senhaComSalt = senha + salt
+        hashObj = hashlib.sha256(senhaComSalt.encode('utf-8'))
+        hash = hashObj.hexdigest()
 
         usuarios = [
 
-            {"nome": "brun", "senha": hash_hex},
-            {"nome": "edie", "senha": hash_hex},
+            {"nome": "bruh", 
+             "senha":
+                {"salt": salt,
+                "hash": hash }
+                }
         ]
         with open(ARQUIVO_JSON, "w") as arquivo:
             json.dump(usuarios, arquivo, indent=4)
@@ -45,22 +52,29 @@ def menu():
                     login = input("Login: ").strip().lower()
                     senha = getpass.getpass("Senha: ")
                     
-                    # Convertendo a senha para bytes e gerando o hash SHA-256 para comparar com a senha dentro do JSON
-                    senha_em_bytes = senha.encode('utf-8')
-                    hash_obj = hashlib.sha256() 
-                    hash_obj.update(senha_em_bytes)
-                    hash_hex = hash_obj.hexdigest()
-                
-                
-                    if any(usuario["nome"] == login and usuario["senha"] == hash_hex for usuario in usuarios):
-                        print(f"\n Usuário autenticado!\n Seja Bem-vindo(a) {login}!\n")
-                        autentificado = True
-                        exit()
+                    user = next((usuario for usuario in usuarios if usuario["nome"] == login), None)
+                    if user:
+                        salt = user["senha"]["salt"]
+
+                        # Verificando se a senha digitada + o salt é igual ao no json
+                        senhaComSalt = senha + salt
+                        hash_obj = hashlib.sha256(senhaComSalt.encode('utf-8')) 
+                        hash = hash_obj.hexdigest()
+                    
+                        if user["senha"]["hash"] == hash:
+                            print(f"\n Usuário autenticado!\n Seja Bem-vindo(a) {login}!\n")
+                            autentificado = True
+                            exit()
                         
+                        else:
+                            print(f"\n Login ou Senha incorretos, por favor tente novamente, você tem {4 - tentativas} tentativas restantes!\n")
+                            tentativas += 1
+                            continue
                     else:
-                        print(f"\n Login ou Senha incorretos, por favor tente novamente, você tem {4 - tentativas} tentativas restantes!\n")
+                        print(f"\nUsuário {login} não encontrado. Você tem {4 - tentativas} tentativas restantes! \n")
                         tentativas += 1
-                    break
+                        continue
+                    
                 except Exception as e:
                     print(f"\n Ocorreu um erro: {e}. Por favor, tente novamente.\n")
                     tentativas += 1
@@ -105,14 +119,18 @@ def menu():
                     confirmarSenha = getpass.getpass("Confirmar senha: ")
 
                     if newSenha == confirmarSenha:
-                        # Convertendo a senha para bytes e gerando o hash SHA-256
-                        senha_em_bytes = newSenha.encode('utf-8')   
-                        hash_obj = hashlib.sha256()
-                        hash_obj.update(senha_em_bytes)
-                        hash_hex = hash_obj.hexdigest()
+                        # gerando um salt e concatenando com a senha para enfim, fazer o hash no formato SHA-256
+                        salt = gerarSalt()
+                        senhaComSalt = newSenha + salt
+                        hashObj = hashlib.sha256(senhaComSalt.encode('utf-8')) 
+                        hash = hashObj.hexdigest()
+                    
+
                         # Criando o novo usuário
                         newUsuario = {"nome": newLogin,
-                                    "senha": hash_hex,
+                                    "senha": {
+                                        "salt": salt,
+                                        "hash": hash}
                                     }
                         usuarios  .append(newUsuario)
                         with open("users.json", mode="w") as arquivo:
