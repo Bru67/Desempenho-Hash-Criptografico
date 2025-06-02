@@ -18,4 +18,4 @@ Código feito para a atividade Somativa 2 da disciplina de Segurança de Informa
 ## Feito por:
 
 - Bruna da Silva Carnelossi
-- Edmundo Soares de Sousa
+- Edmund Soares de Sousa
