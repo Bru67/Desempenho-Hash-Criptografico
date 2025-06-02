@@ -28,6 +28,18 @@ def inicializarDados():
         hashObj2 = hashlib.sha256(senhaComSalt2.encode('utf-8'))
         hash2 = hashObj2.hexdigest()
 
+        senha3 = "abcd" 
+        salt3 = gerarSalt() 
+        senhaComSalt3 = senha3 + salt3
+        hashObj3 = hashlib.sha256(senhaComSalt3.encode('utf-8'))
+        hash3 = hashObj3.hexdigest()
+        
+        senha4 = "dcba" 
+        salt4 = gerarSalt() 
+        senhaComSalt4 = senha4 + salt4
+        hashObj4 = hashlib.sha256(senhaComSalt4.encode('utf-8'))
+        hash4 = hashObj4.hexdigest()
+
         usuarios = [
 
             {"nome": "bruh", 
@@ -35,10 +47,20 @@ def inicializarDados():
                 {"salt": salt1,
                 "hash": hash1 }
                 },
-            {"nome": "eddi", 
+            {"nome": "eddy", 
              "senha":
                 {"salt": salt2,
                 "hash": hash2 }
+                },
+            {"nome": "mari", 
+             "senha":
+                {"salt": salt3,
+                "hash": hash3 }
+                },
+            {"nome": "luna", 
+             "senha":
+                {"salt": salt4,
+                "hash": hash4 }
                 }
         ]
         with open(ARQUIVO_JSON, "w") as arquivo:

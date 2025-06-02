@@ -23,10 +23,24 @@ def inicializarDados():
         hash_obj2 = hashlib.sha256()
         hash_obj2.update(senha_em_bytes2)
         hash_hex2 = hash_obj2.hexdigest()
+        
+        senha3 = "abcd" 
+        senha_em_bytes3 = senha3.encode('utf-8')
+        hash_obj3 = hashlib.sha256()
+        hash_obj3.update(senha_em_bytes3)
+        hash_hex3 = hash_obj3.hexdigest()
+        
+        senha4 = "dcba" 
+        senha_em_bytes4 = senha4.encode('utf-8')
+        hash_obj4 = hashlib.sha256()
+        hash_obj4.update(senha_em_bytes4)
+        hash_hex4 = hash_obj4.hexdigest()        
 
         usuarios = [ #obs: criar mais 2 pelo terminal
             {"nome": "bruh", "senha": hash_hex1},
-            {"nome": "eddi", "senha": hash_hex2},
+            {"nome": "eddy", "senha": hash_hex2},
+            {"nome": "mari", "senha": hash_hex3},
+            {"nome": "luna", "senha": hash_hex4}
         ]
         with open(ARQUIVO_JSON, "w") as arquivo:
             json.dump(usuarios, arquivo, indent=4)
