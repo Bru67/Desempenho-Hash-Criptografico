@@ -9,13 +9,13 @@ import json
 # Seção 2: Quebra de Hashes com força bruta
 
 # Criando um charset para aceitar letras, numeros e caracteres especiais
-charset = string.ascii_letters + string.digits + string.punctuation 
+charset = string.digits +string.ascii_letters + string.punctuation  
 
 # Carregar os hashes do arquivo users.json
 def carregar_hashes(caminho_arquivo):
     with open(caminho_arquivo, 'r') as f:
         usuarios = json.load(f)
-    return [usuario['senha'] for usuario in usuarios]
+    return [usuario['senha'] or usuario['senha']['hash'] for usuario in usuarios]
 
 # Força bruta: tenta combinações até encontrar o hash correspondente
 def quebrar_hash(hash_alvo, charset, tamanho_min, tamanho_max):

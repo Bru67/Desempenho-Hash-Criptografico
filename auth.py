@@ -12,15 +12,21 @@ ARQUIVO_JSON = "users.json"
 def inicializarDados():
     if not os.path.exists(ARQUIVO_JSON):
         # Cria o arquivo JSON com os seguintes usuarios se o arquivo não existir
-        senha = "1234" # Senha padrão para os usuarios
-        senha_em_bytes = senha.encode('utf-8')
-        hash_obj = hashlib.sha256()
-        hash_obj.update(senha_em_bytes)
-        hash_hex = hash_obj.hexdigest()
+        senha1 = "1234" 
+        senha_em_bytes1 = senha1.encode('utf-8')
+        hash_obj1 = hashlib.sha256()
+        hash_obj1.update(senha_em_bytes1)
+        hash_hex1 = hash_obj1.hexdigest()
+
+        senha2 = "4321" 
+        senha_em_bytes2 = senha2.encode('utf-8')
+        hash_obj2 = hashlib.sha256()
+        hash_obj2.update(senha_em_bytes2)
+        hash_hex2 = hash_obj2.hexdigest()
 
         usuarios = [ #obs: criar mais 2 pelo terminal
-            {"nome": "brun", "senha": hash_hex},
-            {"nome": "edie", "senha": hash_hex},
+            {"nome": "bruh", "senha": hash_hex1},
+            {"nome": "eddi", "senha": hash_hex2},
         ]
         with open(ARQUIVO_JSON, "w") as arquivo:
             json.dump(usuarios, arquivo, indent=4)

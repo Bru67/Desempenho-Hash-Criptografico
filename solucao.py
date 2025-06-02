@@ -15,19 +15,30 @@ def gerarSalt():
 
 def inicializarDados():
     if not os.path.exists(ARQUIVO_JSON):
-        # Cria o arquivo JSON com usuarios padrões se não existir
-        senha = "1234" 
-        salt = gerarSalt() 
-        senhaComSalt = senha + salt
-        hashObj = hashlib.sha256(senhaComSalt.encode('utf-8'))
-        hash = hashObj.hexdigest()
+        # Cria o arquivo JSON com usuarios padrões se o arquivo json não existir
+        senha1 = "1234" 
+        salt1 = gerarSalt() 
+        senhaComSalt1 = senha1 + salt1
+        hashObj1 = hashlib.sha256(senhaComSalt1.encode('utf-8'))
+        hash1 = hashObj1.hexdigest()
+
+        senha2 = "4321" 
+        salt2 = gerarSalt() 
+        senhaComSalt2 = senha2 + salt2
+        hashObj2 = hashlib.sha256(senhaComSalt2.encode('utf-8'))
+        hash2 = hashObj2.hexdigest()
 
         usuarios = [
 
             {"nome": "bruh", 
              "senha":
-                {"salt": salt,
-                "hash": hash }
+                {"salt": salt1,
+                "hash": hash1 }
+                },
+            {"nome": "eddi", 
+             "senha":
+                {"salt": salt2,
+                "hash": hash2 }
                 }
         ]
         with open(ARQUIVO_JSON, "w") as arquivo:
